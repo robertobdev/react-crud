@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from '../logo.svg';
+import '../App.css';
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, TextField, Button }  from '@material-ui/core';
+import SideBar from './common/sidebar';
 class Form extends Component {
   
   constructor(props) {
@@ -17,12 +18,16 @@ class Form extends Component {
     this.props.onChange(event);
   }
 
+  handleOnClick = (event) => {
+    this.props.onClick(event);
+  }
+
   render() {
     return (
       <div>
         <TextField label="name" id="name" onChange={this.handleChange} />
         <TextField label="age" id="age" onChange={this.handleChange} />
-        <Button color="primary" onClick={this.props.onClick}>Save</Button>
+        <Button color="primary" onClick={this.handleOnClick}>{this.props.btn}</Button>
       </div>
     )
   }
@@ -31,6 +36,7 @@ class Form extends Component {
 class App extends Component {
   data;
   id = 0;
+  btnLabel = "Save";
   constructor(props) {
     super(props);
     this.data = [
@@ -48,9 +54,11 @@ class App extends Component {
     return {id, name, age};
   }
 
-  handleClick = () => {
-    console.log(this.state.person);
-    this.setState({ data: [ ...this.state.data, this.createData(this.state.person.name, this.state.person.age)] });
+  handleClick = (e) => {
+    console.log(e.target.html);
+    // if(e.target
+    // console.log(this.state.person);
+    // this.setState({ data: [ ...this.state.data, this.createData(this.state.person.name, this.state.person.age)] });
   }
   handleRemovePerson(person) {
     let id = person.id;
@@ -62,7 +70,15 @@ class App extends Component {
 
   handleEditPerson(person){
     console.log(this.state.person);
-    this.setState({ data: [...this.state.data, this.createData(this.state.person.name, this.state.person.age)] });
+    // let myData = this.state.data.map(p => {
+    //   if (p.id == person.id) {
+    //     p.name = this.state.person.name,
+    //       p.age = this.state.person.age
+    //   }
+    //   return person;
+    // });
+    console.log();
+    // this.setState({ data: [...this.state.data, this.createData(this.state.person.name, this.state.person.age)] });
   }
 
   handleChange = (event) => {
@@ -79,10 +95,11 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <div>
+          <SideBar />
           <p className="App-intro">
             To get started, edit <code>src/App.js</code> and save to reload.
           </p>
-          <Form onClick={this.handleClick} onChange={this.handleChange}/>
+          <Form onClick={this.handleClick} onChange={this.handleChange} btn={this.btnLabel}/>
           <Table>
             <TableHead>
               <TableRow>
@@ -107,7 +124,7 @@ class App extends Component {
                     </TableCell> 
                     <TableCell>
                       <Button color="primary" onClick={() => this.handleRemovePerson(person)}>Remove</Button>
-                      <Button color="primary" onClick={this.handleEditPerson}>Edit</Button>
+                      <Button color="primary" onClick={() => this.handleEditPerson(person)}>Edit</Button>
                     </TableCell> 
                  </TableRow>
                ) 
