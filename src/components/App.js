@@ -1,93 +1,72 @@
 import React, { Component } from 'react';
 import logo from '../logo.svg';
 import '../App.css';
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, TextField, Button }  from '@material-ui/core';
-import SideBar from './common/sidebar';
-class Form extends Component {
-  
-  constructor(props) {
-    super(props);
-  }
-
-  // handleChange = (event) => {
-  //   let key = event.target.id;
-  //   this.setState({ [key]: event.target.value });
-  // }
-
-  handleChange = (event) => {
-    this.props.onChange(event);
-  }
-
-  handleOnClick = (event) => {
-    this.props.onClick(event);
-  }
-
-  render() {
-    return (
-      <div>
-        <TextField label="name" id="name" onChange={this.handleChange} />
-        <TextField label="age" id="age" onChange={this.handleChange} />
-        <Button color="primary" onClick={this.handleOnClick}>{this.props.btn}</Button>
-      </div>
-    )
-  }
-}
+import { Table, TableBody, TableCell, TableHead, TableRow, TextField, Button }  from '@material-ui/core';
 
 class App extends Component {
-  data;
-  id = 0;
-  btnLabel = "Save";
-  constructor(props) {
-    super(props);
-    this.data = [
-      this.createData('Frozen yoghurt', 24),
-      this.createData('Ice cream sandwich', 37),
-      this.createData('Eclair', 24),
-      this.createData('Cupcake', 67),
-      this.createData('Gingerbread', 49)
-    ];
-    this.state = { person: { name: '', age: '' }, data : this.data };
-    console.log(this.data);
-  }
-  createData = (name, age) => {
-    let id = this.id += 1;
-    return {id, name, age};
+  constructor() {
+    super();
+    this.state = {
+      todos: [],
+      name: '',
+      completed: '',
+      title: 'React simple todo',
+      counter: 0,
+      previousCounter: 0,
+      status: 0 //its means that status is to create a new todo
+    }
   }
 
-  handleClick = (e) => {
-    console.log(e.target.html);
-    // if(e.target
-    // console.log(this.state.person);
-    // this.setState({ data: [ ...this.state.data, this.createData(this.state.person.name, this.state.person.age)] });
+
+  handleOnClick(type){
+    let name = this.state.name;
+    let completed = this.state.completed;
+    let counter = this.state.counter;
+    let todo = {
+      name, completed, counter
+    };
+    if (type === "new") {
+      counter += 1;
+      this.setState({ todos: [...this.state.todos, todo], counter, previousCounter: counter, name : '', completed : '', status : 0 });
+      this.refs.todoForm.reset();
+    } else {
+      let todos = this.state.todos.map(todo => {
+        if (todo.counter == this.state.previousCounter) {
+          todo.name = name,
+          todo.completed = completed  
+        }
+        return todo;
+      });
+      console.log(todos);
+      this.setState({ todos, previousCounter: counter, name: '', completed: '', status: 0 });
+    }
   }
-  handleRemovePerson(person) {
-    let id = person.id;
-    this.setState({
-      data: this.state.data.filter(person => person.id !== id)
-    })
-    console.log(person);
+  handleUpdate(t) {
+    console.log(t);
+    this.setState({ name: t.name, completed: t.completed, status : 1, previousCounter : t.counter });
   }
 
-  handleEditPerson(person){
-    console.log(this.state.person);
-    // let myData = this.state.data.map(p => {
-    //   if (p.id == person.id) {
-    //     p.name = this.state.person.name,
-    //       p.age = this.state.person.age
-    //   }
-    //   return person;
-    // });
-    console.log();
-    // this.setState({ data: [...this.state.data, this.createData(this.state.person.name, this.state.person.age)] });
+  handleInputs = (e) => {
+    this.setState({ [e.target.id]: e.target.value });
   }
 
-  handleChange = (event) => {
-    let key = event.target.id;
-    this.state.person[key] = event.target.value;
-    this.setState({ person: this.state.person });
-  }
-  
+  handleRemove(t) {
+    console.log(t);
+    let todos = this.state.todos.filter(todo => todo.counter !== t.counter);
+    console.log(todos);
+    this.setState({ todos });
+  } 
+
   render() {
+    let title = this.state.title;
+    let todos = this.state.todos;
+    const isUpdate = this.state.status;
+    const buttons = isUpdate ? (
+      <div>
+        <Button color="primary" onClick={() => this.handleOnClick('new')}>Add todo</Button>
+        <Button color="primary" onClick={() => this.handleOnClick('update')}>Update</Button>
+      </div>
+    ) : (<Button color="primary" onClick={() => this.handleOnClick('new')}>Add todo</Button>);
     return (
       <div className="App">
         <header className="App-header">
@@ -95,41 +74,44 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <div>
-          <SideBar />
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
-          <Form onClick={this.handleClick} onChange={this.handleChange} btn={this.btnLabel}/>
+          <h1>{title}</h1>
+          <form ref="todoForm">
+            <TextField label="what do you need to do" id="name" value={this.state.name} onChange={this.handleInputs} />
+            <TextField label="is it done yet?" id="completed" value={this.state.completed} onChange={this.handleInputs} />
+            {/* <Button color="primary" onClick={() => this.handleOnClick('new')}>Add todo</Button>
+              <Button color="primary"  onClick={() => this.handleOnClick('update')}>Update</Button> */}
+            {buttons}
+          </form>
+        </div>
+        <div>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Id</TableCell>
                 <TableCell>Nome</TableCell>
-                <TableCell>Idade</TableCell>
-                <TableCell>Acões</TableCell>
+                <TableCell>Completed</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.data.map(person => {
+              {todos.map(todo => {
                 return (
-                  <TableRow key={person.id}>
+                  <TableRow key={todo.counter}>
                     <TableCell>
-                      {person.id}
+                      {todo.counter}
                     </TableCell> 
                     <TableCell>
-                      {person.name}
+                      {todo.name}
                     </TableCell> 
                     <TableCell>
-                      {person.age}s
+                      {todo.completed}
                     </TableCell> 
                     <TableCell>
-                      <Button color="primary" onClick={() => this.handleRemovePerson(person)}>Remove</Button>
-                      <Button color="primary" onClick={() => this.handleEditPerson(person)}>Edit</Button>
+                      <Button color="primary" onClick={() => this.handleRemove(todo)}>Remove</Button>
+                      <Button color="primary" onClick={() => this.handleUpdate(todo)}>Edit</Button>
                     </TableCell> 
                  </TableRow>
                ) 
-             })}
-              
+             })} 
             </TableBody>
           </Table>
         </div>
