@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from '../logo.svg';
 import '../App.css';
-import { Table, TableBody, TableCell, TableHead, TableRow, TextField, Button }  from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow, TextField, Button, Paper } from '@material-ui/core';
 
 class App extends Component {
   constructor() {
@@ -18,7 +18,7 @@ class App extends Component {
   }
 
 
-  handleOnClick(type){
+  handleOnClick(type) {
     let name = this.state.name;
     let completed = this.state.completed;
     let counter = this.state.counter;
@@ -27,13 +27,13 @@ class App extends Component {
     };
     if (type === "new") {
       counter += 1;
-      this.setState({ todos: [...this.state.todos, todo], counter, previousCounter: counter, name : '', completed : '', status : 0 });
+      this.setState({ todos: [...this.state.todos, todo], counter, previousCounter: counter, name: '', completed: '', status: 0 });
       this.refs.todoForm.reset();
     } else {
       let todos = this.state.todos.map(todo => {
         if (todo.counter == this.state.previousCounter) {
           todo.name = name,
-          todo.completed = completed  
+            todo.completed = completed
         }
         return todo;
       });
@@ -43,7 +43,7 @@ class App extends Component {
   }
   handleUpdate(t) {
     console.log(t);
-    this.setState({ name: t.name, completed: t.completed, status : 1, previousCounter : t.counter });
+    this.setState({ name: t.name, completed: t.completed, status: 1, previousCounter: t.counter });
   }
 
   handleInputs = (e) => {
@@ -55,7 +55,7 @@ class App extends Component {
     let todos = this.state.todos.filter(todo => todo.counter !== t.counter);
     console.log(todos);
     this.setState({ todos });
-  } 
+  }
 
   render() {
     let title = this.state.title;
@@ -70,8 +70,9 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <div>
+            <h1 className="App-title">Today's To Do List</h1>
+          </div>  
         </header>
         <div>
           <h1>{title}</h1>
@@ -98,20 +99,20 @@ class App extends Component {
                   <TableRow key={todo.counter}>
                     <TableCell>
                       {todo.counter}
-                    </TableCell> 
+                    </TableCell>
                     <TableCell>
                       {todo.name}
-                    </TableCell> 
+                    </TableCell>
                     <TableCell>
                       {todo.completed}
-                    </TableCell> 
+                    </TableCell>
                     <TableCell>
                       <Button color="primary" onClick={() => this.handleRemove(todo)}>Remove</Button>
                       <Button color="primary" onClick={() => this.handleUpdate(todo)}>Edit</Button>
-                    </TableCell> 
-                 </TableRow>
-               ) 
-             })} 
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </div>
