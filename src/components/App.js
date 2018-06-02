@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from '../logo.svg';
 import '../App.css';
-import { Table, TableBody, TableCell, TableHead, TableRow, TextField, Button, Paper } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow, TextField, Button, Paper, FormControlLabel, Checkbox } from '@material-ui/core';
 
 class App extends Component {
   constructor() {
@@ -25,11 +25,12 @@ class App extends Component {
     let todo = {
       name, completed, counter
     };
+    //create todo
     if (type === "new") {
       counter += 1;
       this.setState({ todos: [...this.state.todos, todo], counter, previousCounter: counter, name: '', completed: '', status: 0 });
       this.refs.todoForm.reset();
-    } else {
+    } else { //update todo
       let todos = this.state.todos.map(todo => {
         if (todo.counter == this.state.previousCounter) {
           todo.name = name,
@@ -57,8 +58,11 @@ class App extends Component {
     this.setState({ todos });
   }
 
+  handleChange(check){
+
+  }
+
   render() {
-    let title = this.state.title;
     let todos = this.state.todos;
     const isUpdate = this.state.status;
     const buttons = isUpdate ? (
@@ -70,18 +74,12 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <div>
-            <h1 className="App-title">Today's To Do List</h1>
-          </div>  
+          <h1 className="App-title">Today's To Do List</h1>
         </header>
         <div>
-          <h1>{title}</h1>
           <form ref="todoForm">
             <TextField label="what do you need to do" id="name" value={this.state.name} onChange={this.handleInputs} />
-            <TextField label="is it done yet?" id="completed" value={this.state.completed} onChange={this.handleInputs} />
-            {/* <Button color="primary" onClick={() => this.handleOnClick('new')}>Add todo</Button>
-              <Button color="primary"  onClick={() => this.handleOnClick('update')}>Update</Button> */}
-            {buttons}
+              {buttons}
           </form>
         </div>
         <div>
@@ -98,7 +96,16 @@ class App extends Component {
                 return (
                   <TableRow key={todo.counter}>
                     <TableCell>
-                      {todo.counter}
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={this.state.gilad}
+                            onChange={() => this.handleChange('gilad')}
+                            value="gilad"
+                          />
+                        }
+                        label="Gilad Gray"
+                      />
                     </TableCell>
                     <TableCell>
                       {todo.name}
