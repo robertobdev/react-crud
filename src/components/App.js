@@ -79,10 +79,10 @@ class App extends Component {
     const isUpdate = this.state.status;
     const buttons = isUpdate ? (
       <div>
-        <Button style={{ color: 'rgb(243, 7, 7)' }} onClick={() => this.handleOnClick('new')}>Add todo</Button>
-        <Button style={{ color: 'rgb(243, 7, 7)' }} onClick={() => this.handleOnClick('update')}>Update</Button>
+        <Button style={{ color: 'rgb(243, 7, 7)' }} disabled={this.state.name === '' ? true : false} onClick={() => this.handleOnClick('new')}>Add todo</Button>
+        <Button style={{ color: 'rgb(243, 7, 7)' }} disabled={this.state.name === '' ? true : false} onClick={() => this.handleOnClick('update')}>Update</Button>
       </div>
-    ) : (<Button style={{ color: 'rgb(243, 7, 7)' }} onClick={() => this.handleOnClick('new')}>Add todo</Button>);
+    ) : (<Button style={{ color: 'rgb(243, 7, 7)' }} disabled={this.state.name === '' ? true : false}  onClick={() => this.handleOnClick('new')}>Add todo</Button>);
     return (
       <div className="App">
         <header className="App-header">
@@ -90,7 +90,7 @@ class App extends Component {
         </header>
         <div>
           <form ref="todoForm">
-            <TextField label="what do you need to do" id="name" value={this.state.name} onChange={this.handleInputs} />
+            <TextField required={true} label="what do you need to do" id="name" value={this.state.name} onChange={this.handleInputs} />
               {buttons}
           </form>
         </div>
