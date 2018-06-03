@@ -32,9 +32,9 @@ class App extends Component {
       this.refs.todoForm.reset();
     } else { //update todo
       let todos = this.state.todos.map(todo => {
-        if (todo.counter == this.state.previousCounter) {
+        if (todo.counter === this.state.previousCounter) {
           todo.name = name,
-            todo.completed = completed
+          todo.completed = completed
         }
         return todo;
       });
@@ -49,9 +49,9 @@ class App extends Component {
 
   handleChecked(t) {
     let todos = this.state.todos.map(todo => {
-      if (todo.counter == this.state.previousCounter) {
+      if (todo.counter === this.state.previousCounter) {
         todo.name = t.name,
-          todo.completed = t.completed
+        todo.completed = t.completed
       }
       return todo;
     });
@@ -79,10 +79,10 @@ class App extends Component {
     const isUpdate = this.state.status;
     const buttons = isUpdate ? (
       <div>
-        <Button color="primary" onClick={() => this.handleOnClick('new')}>Add todo</Button>
-        <Button color="primary" onClick={() => this.handleOnClick('update')}>Update</Button>
+        <Button style={{ color: 'rgb(243, 7, 7)' }} onClick={() => this.handleOnClick('new')}>Add todo</Button>
+        <Button style={{ color: 'rgb(243, 7, 7)' }} onClick={() => this.handleOnClick('update')}>Update</Button>
       </div>
-    ) : (<Button color="primary" onClick={() => this.handleOnClick('new')}>Add todo</Button>);
+    ) : (<Button style={{ color: 'rgb(243, 7, 7)' }} onClick={() => this.handleOnClick('new')}>Add todo</Button>);
     return (
       <div className="App">
         <header className="App-header">
