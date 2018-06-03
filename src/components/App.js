@@ -68,11 +68,7 @@ class App extends Component {
     let todos = this.state.todos.filter(todo => todo.counter !== t.counter);
     console.log(todos);
     this.setState({ todos });
-  }
-
-  handleChange(check){
-
-  }
+  } 
 
   render() {
     let todos = this.state.todos;
