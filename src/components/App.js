@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import logo from '../logo.svg';
 import '../App.css';
-import { Table, TableBody, TableCell, TableHead, TableRow, TextField, Button, Paper, FormControlLabel, Checkbox } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
+import TableComponent from './TableComponent';
 
 class App extends Component {
   constructor() {
@@ -9,7 +9,7 @@ class App extends Component {
     this.state = {
       todos: [],
       name: '',
-      completed: '',
+      completed: false,
       title: 'React simple todo',
       counter: 0,
       previousCounter: 0,
@@ -28,7 +28,7 @@ class App extends Component {
     //create todo
     if (type === "new") {
       counter += 1;
-      this.setState({ todos: [...this.state.todos, todo], counter, previousCounter: counter, name: '', completed: '', status: 0 });
+      this.setState({ todos: [...this.state.todos, todo], counter, previousCounter: counter, name: '', completed: false, status: 0 });
       this.refs.todoForm.reset();
     } else { //update todo
       let todos = this.state.todos.map(todo => {
@@ -39,12 +39,24 @@ class App extends Component {
         return todo;
       });
       console.log(todos);
-      this.setState({ todos, previousCounter: counter, name: '', completed: '', status: 0 });
+      this.setState({ todos, previousCounter: counter, name: '', completed: false, status: 0 });
     }
   }
   handleUpdate(t) {
     console.log(t);
     this.setState({ name: t.name, completed: t.completed, status: 1, previousCounter: t.counter });
+  }
+
+  handleChecked(t) {
+    let todos = this.state.todos.map(todo => {
+      if (todo.counter == this.state.previousCounter) {
+        todo.name = t.name,
+          todo.completed = t.completed
+      }
+      return todo;
+    });
+    console.log(todos);
+    this.setState({ todos, previousCounter: this.state.counter, name: '', completed: false, status: 0 });
   }
 
   handleInputs = (e) => {
@@ -83,45 +95,12 @@ class App extends Component {
           </form>
         </div>
         <div>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Id</TableCell>
-                <TableCell>Nome</TableCell>
-                <TableCell>Completed</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {todos.map(todo => {
-                return (
-                  <TableRow key={todo.counter}>
-                    <TableCell>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={this.state.gilad}
-                            onChange={() => this.handleChange('gilad')}
-                            value="gilad"
-                          />
-                        }
-                        label="Gilad Gray"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      {todo.name}
-                    </TableCell>
-                    <TableCell>
-                      {todo.completed}
-                    </TableCell>
-                    <TableCell>
-                      <Button color="primary" onClick={() => this.handleRemove(todo)}>Remove</Button>
-                      <Button color="primary" onClick={() => this.handleUpdate(todo)}>Edit</Button>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
+          <TableComponent
+            todo={todos}
+            handleRemove={(t) => this.handleRemove(t)}
+            handleUpdate={(t) => this.handleUpdate(t)}
+            handleChecked={(t) => this.handleChecked(t)}
+          />
         </div>
       </div>
     );
