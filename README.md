@@ -29,10 +29,10 @@ import { UtilsProvider } from 'ionic-utils';
 ```
 
 # Methods <a name="methods"></a>
-* [.makeAlert(title, message)](#makeAlert)
+* [.makeAlert(title, message)]
 
 
-* [.makeLoading(message)](#makeLoading)
+* [.makeLoading(message)]
     
 
 ## .makeAlert 
